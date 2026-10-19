@@ -1,0 +1,19 @@
+name = "lowfly"
+main = "src/worker.js"
+compatibility_date = "2026-10-01"
+
+# The game itself: everything in ./public is served as static files.
+# Only /ws goes through the Worker first, so normal page loads do not count as Worker requests.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = ["/ws"]
+
+# One Durable Object per room code. The free plan only allows SQLite-backed Durable Objects.
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "Room"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]
